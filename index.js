@@ -10,6 +10,10 @@ const endpoints = {
 };
 
 
+function generateAppId(username, appName) {
+    return `${username}_${appName}`;
+}
+
 exports.handler = async (event, lambdaContext) => {
     // Username accessible via `event.context.username`
     // Current resource path accessible via `event.context.requestPath`
@@ -20,24 +24,42 @@ exports.handler = async (event, lambdaContext) => {
     var response;
     switch (event.context.resourcePath) {
 
+        // GET - List owned apps
         case "/apps/list":
             response = await handler(event.context.username);
             break;
 
+
+        // GET - Display schema for an app
         case "/apps/app/{app_name}/schema":
-            response = await handler(`${event.context.username}_${event.params.path.app_name}`);
+            response = await handler(
+                generateAppId(
+                    event.context.username,
+                    event.params.path.app_name
+                )
+            );
             break;
 
+        // GET - Download data from all metrics for an app
         case "/apps/app/{app_name}/download":
             break;
 
+        // GET - Download data from a single metric for an app
         case "/apps/app/{app_name}/download/{metric}":
             break;
 
+        // DELETE - Delete an app (i.e. drop the app table)
         case "/apps/app/{app_name}":
             break;
 
+        // GET - List metrics present in an app
         case "/apps/app/{app_name}/metrics":
+            response = await handler(
+                generateAppId(
+                    event.context.username,
+                    event.params.path.app_name
+                )
+            )
             break;
     }
     console.log("Done");

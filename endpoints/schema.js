@@ -12,9 +12,9 @@ const queryTemplate = "SELECT column_name, data_type from information_schema.col
 
 
 // Implementation of this endpoint
-exports.handler = async (appName) => {
+exports.handler = async (appId) => {
     try {
-        const result = await query(queryTemplate, [appName]);
+        const result = await query(queryTemplate, [appId]);
 
         if (!result) {
             throw "Invalid result object";
