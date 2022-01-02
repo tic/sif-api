@@ -25,11 +25,6 @@ exports.handler = async (appId) => {
             throw "Invalid result object";
         }
 
-        // if there are no rows in the result, the app does not exist. return 404
-        if (result.rowCount === 0) {
-            return responses.response404;
-        }
-
         const resp = responses.response200;
         resp.metrics = result.rows.map(
             rowObj => rowObj.metric
