@@ -21,6 +21,7 @@ exports.handler = async (event, lambdaContext) => {
     switch (event.context.resourcePath) {
 
         case "/apps/list":
+            response = await handler(event.context.username);
             break;
 
         case "/apps/app/{app_name}/schema":
