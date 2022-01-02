@@ -9,6 +9,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "pg": "^8.7.1",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "pg-ssl": "0.0.1"
   }
 }

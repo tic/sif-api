@@ -1,0 +1,32 @@
+## This template is adapted from the default method
+## request passthrough provided by AWS. The main change
+## from the default and this template is the removal
+## of unused portions of the event and addition of
+## the user parameter in the context portion of the
+## integration request.
+#set($allParams = $input.params())
+{
+"params" : {
+#foreach($type in $allParams.keySet())
+    #set($params = $allParams.get($type))
+"$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+        #if($foreach.hasNext),#end
+    #end
+}
+    #if($foreach.hasNext),#end
+#end
+},
+## Pulls the username from the authorizer. The authorizer
+## extracts the Authorization token provided in the header
+## portion of the request and verifies it through Cognito.
+## A request that reaches the lambda handler is known to
+## have a valid username belonging to someone in the SIF
+## user pool, and this username is accessible via
+## `event.context.username`
+"context" : {
+    "username" : "$context.authorizer.claims['cognito:username']",
+    "resourcePath" : "$context.resourcePath"
+    }
+}
