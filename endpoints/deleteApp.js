@@ -7,7 +7,7 @@ const format = require("pg-format");
 const responses = require("./responses");
 
 
-// Query template for getting table schema
+// Query template for deleting an app
 const queryTemplate = "DROP TABLE %I";
 
 

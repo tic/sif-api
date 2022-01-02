@@ -40,14 +40,6 @@ exports.handler = async (event, lambdaContext) => {
             );
             break;
 
-        // GET - Download data from all metrics for an app
-        case "/apps/app/{app_name}/download":
-            break;
-
-        // GET - Download data from a single metric for an app
-        case "/apps/app/{app_name}/download/{metric}":
-            break;
-
         // DELETE - Delete an app (i.e. drop the app table)
         case "/apps/app/{app_name}":
             response = await handler(

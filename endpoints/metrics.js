@@ -7,7 +7,7 @@ const format = require("pg-format");
 const responses = require("./responses");
 
 
-// Query template for getting table schema
+// Query template for listing metrics in an app
 const queryTemplate = "SELECT DISTINCT metric FROM %I";
 
 
