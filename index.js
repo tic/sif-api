@@ -50,6 +50,12 @@ exports.handler = async (event, lambdaContext) => {
 
         // DELETE - Delete an app (i.e. drop the app table)
         case "/apps/app/{app_name}":
+            response = await handler(
+                generateAppId(
+                    event.context.username,
+                    event.params.path.app_name
+                )
+            )
             break;
 
         // GET - List metrics present in an app
