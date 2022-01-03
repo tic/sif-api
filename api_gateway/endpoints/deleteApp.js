@@ -25,7 +25,7 @@ exports.handler = async (appId) => {
             throw "Invalid result object";
         }
 
-        const resp = responses.response200;
+        const resp = Object.assign({}, responses.response200);
         resp.deleted = true;
 
         return resp;

@@ -20,9 +20,9 @@ exports.handler = async (username) => {
             throw "Invalid result object";
         }
 
-        const resp = responses.response200;
+        const resp = Object.assign({}, responses.response200);
         resp.apps = result.rows.map(
-            rowObj => rowObj.table_name
+            rowObj => rowObj.table_name.substring(rowObj.table_name.indexOf("_") + 1)
         );
 
         return resp;

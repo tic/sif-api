@@ -25,7 +25,7 @@ exports.handler = async (appId) => {
             return responses.response404;
         }
 
-        const resp = responses.response200;
+        const resp = Object.assign({}, responses.response200);
         resp.schema = result.rows.map(
             rowObj => ({
                 column: rowObj.column_name,
