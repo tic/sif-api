@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SIF Download API", "SIF_Download_API.njsproj", "{A2C2DF2A-B1A6-418A-8706-73D11F0C462F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2C2DF2A-B1A6-418A-8706-73D11F0C462F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C2DF2A-B1A6-418A-8706-73D11F0C462F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C2DF2A-B1A6-418A-8706-73D11F0C462F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C2DF2A-B1A6-418A-8706-73D11F0C462F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E780B320-833D-4C83-825E-F9D55922FC7B}
+	EndGlobalSection
+EndGlobal
