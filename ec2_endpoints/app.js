@@ -26,12 +26,20 @@ if (config.AUTH == "true") {
     app.use(authenticate);
 } else {
     console.warn("AUTHENTICATION DISABLED");
+    app.use((req, res, next) => {
+        req.username = "";
+        next();
+    });
 }
 
 
 // Create download routes
-app.get("/:appName/all", require("./endpoints/download").downloadAllMetrics);
-app.get("/:appName/metric/:metric", require("./endpoints/downloadMetric").downloadSingleMetric);
+app.get("/v1/:appName/all", require("./endpoints/download").downloadAllMetrics);
+app.get("/v1/:appName/metric/:metric", require("./endpoints/downloadMetric").downloadSingleMetric);
+
+
+// Create documentation route
+app.get("/v1/documentation", require("./endpoints/documentation").getDocumentation);
 
 
 // Create the server (with SSL)
