@@ -80,8 +80,6 @@ exports.downloadSingleMetric = async (req, res) => {
         var lastChunkSize = 0;
 
         do {
-            console.log("starting chunk %d-%d", chunkStart, queryEnd);
-
             // Fetch data for the current chunk
             const chunk = await query(
                 tabledQueryTemplate,
@@ -89,7 +87,6 @@ exports.downloadSingleMetric = async (req, res) => {
             );
 
             // Update the last chunk size
-            console.log(chunk.rowCount);
             lastChunkSize = chunk.rowCount;
 
             // If the current chunk is empty, then the download
