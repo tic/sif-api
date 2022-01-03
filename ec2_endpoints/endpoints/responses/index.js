@@ -9,6 +9,19 @@ exports.response200 = {
 };
 
 
+// The default response for STATUS 400 - BAD REQUEST
+exports.response400 = {
+    code: 400,
+    message: "Missing required request parameters"
+};
+
+
+// The default response for STATUS 401 - UNAUTHORIZED
+exports.response401 = {
+    code: 401,
+    message: "Missing Authorization header"
+};
+
 // The default response for STATUS 404 - NOT FOUND
 exports.response404 = {
     code: 404,
@@ -20,4 +33,4 @@ exports.response404 = {
 exports.response500 = {
     code: 500,
     message: "An error occurred while processing the request"
-}
+};

@@ -1,19 +1,26 @@
 'use strict';
 
-const config = require("./lib/config");
+// Load configuration file
+const { config } = require("./lib/config");
+
+
+// Import libraries
 const http = require("http");
 const https = require("https");
 const express = require("express");
 const cors = require("cors");
 
 
+// Initialize and configure app
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-if (config.AUTH == true) {
+// Attach authentication middleware, if the
+// configuration specifies authentication
+if (config.AUTH == "true") {
     console.log("Authentication enabled");
     const { authenticate } = require("./lib/auth");
     app.use(authenticate);
@@ -22,6 +29,13 @@ if (config.AUTH == true) {
 }
 
 
+// Create download routes
+app.get("/:appName/all", require("./endpoints/download").downloadAllMetrics);
+app.get("/:appName/metric/:metric", require("./endpoints/downloadMetric").downloadSingleMetric);
+
+
+// Create the server (with SSL)
+// parameters, if necessary
 var server;
 if (config.SSL == true) {
     config.PORT = 443;
@@ -37,6 +51,7 @@ if (config.SSL == true) {
 }
 
 
+// Start up the server
 server.listen(config.PORT);
 server.on(
     "listening",
