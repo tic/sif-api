@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 if (config.AUTH == "true") {
     console.log("Authentication enabled");
     const { authenticate } = require("./lib/auth");
-    app.use(authenticate);
+    app.use("/v1", authenticate);
 } else {
     console.warn("AUTHENTICATION DISABLED");
     app.use((req, res, next) => {
@@ -40,6 +40,13 @@ app.get("/v1/:appName/metric/:metric", require("./endpoints/downloadMetric").dow
 
 // Create documentation route
 app.get("/v1/documentation", require("./endpoints/documentation").getDocumentation);
+
+
+// Health check endpoint
+app.get("/", (req, res) => {
+    console.log("Health check initiated");
+    res.status(200).send("");
+});
 
 
 // Create the server (with SSL)

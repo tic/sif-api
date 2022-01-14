@@ -26,18 +26,18 @@ exports.downloadAllMetrics = async (req, res) => {
 
         // Start time is required
         if (req.query.start === "" || isNaN(req.query.start)) {
-            const resp = responses.response400;
+            const resp = Object.assign({}, responses.response400);
             resp.details = "Must provide a valid start time (unix epoch time)";
-            res.status(400).send(resp);
+            res.status(400).json(resp);
             return;
         }
 
         // End time is optional, but if one is provided,
         // it must be a valid number
         if (req.query.end !== undefined && isNaN(req.query.end)) {
-            const resp = responses.response400;
+            const resp = Object.assign({}, responses.response400);
             resp.details = "Providing an end time is optional, but if given, it must be valid (unix epoch time)";
-            res.status(400).send(resp);
+            res.status(400).json(resp);
             return;
         }
 
@@ -51,20 +51,28 @@ exports.downloadAllMetrics = async (req, res) => {
         // Check to see if the app actually exists
         const tableExists = await hypertableExists(tableToQuery);
         if (!tableExists) {
-            const resp = responses.response404;
-            res.status(400).send(resp);
+            const resp = Object.assign({}, responses.response404);
+            res.status(400).json(resp);
             return;
         }
 
         // Parse the start and end times
-        var queryStart = parseFloat(req.query.start) * 1000;
+        var queryStart = parseFloat(req.query.start);
         var queryEnd = req.query.end === undefined ?
-            (new Date()).getTime() :
-            parseFloat(req.query.end) * 1000;
+            (new Date()).getTime() / 1000 :
+            parseFloat(req.query.end);
+
+        if (queryStart > queryEnd) {
+            const resp = Object.assign({}, responses.response400);
+            resp.message = "Invalid start and end time combination";
+            resp.details = "The start time cannot be after the end time. If end time was not specified, it defaults to the current time, so querying a start date that is in the future and providing no end date is a bad request"
+            res.status(400).json(resp);
+            return;
+        }
 
         // Set response headers
         // File name format: username.appName.metric.startTime_stopTime
-        const filename = `${req.username}.${req.params.appName}.${queryStart}_${queryEnd}.csv`;
+        const filename = `${req.username}.${req.params.appName}.${queryStart}-${queryEnd}.csv`;
         res.set({
             "Content-Disposition": `attachment; filename="${filename}"`,
             "Content-Type": "text/csv",
@@ -75,7 +83,7 @@ exports.downloadAllMetrics = async (req, res) => {
         res.write(csvHeaderRow);
 
         // Initialize chunk variables
-        var chunkStart = queryStart / 1000;
+        var chunkStart = queryStart;
         var lastChunkSize = 0;
 
         do {
@@ -130,6 +138,6 @@ exports.downloadAllMetrics = async (req, res) => {
         console.log("Unexpected download error\n%s", err);
 
         // 500 error
-        res.status(500).send(responses.response500);
+        res.status(500).json(responses.response500);
     }
 }
