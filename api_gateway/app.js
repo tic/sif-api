@@ -7,11 +7,11 @@ function testSchema() {
     handler({
         params: {
             path: {
-                app_name: "DeleteMe"
+                app_name: ""
             }
         },
         context: {
-            username: "gmf",
+            username: "",
             resourcePath: "/apps/app/{app_name}"
         }
     }).then(r => console.log(r))

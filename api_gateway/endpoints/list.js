@@ -8,7 +8,13 @@ const responses = require("./responses");
 
 
 // Query template for getting owned apps
-const queryTemplate = "SELECT DISTINCT table_name FROM information_schema.columns WHERE table_name LIKE CONCAT($1::varchar, '\\_%')";
+const queryTemplate = `
+SELECT DISTINCT table_name
+FROM
+    information_schema.columns
+WHERE
+    table_name LIKE CONCAT($1::varchar, '\\_%')
+`;
 
 
 // Implementation of this endpoint

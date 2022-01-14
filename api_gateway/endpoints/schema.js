@@ -8,7 +8,16 @@ const responses = require("./responses");
 
 
 // Query template for getting table schema
-const queryTemplate = "SELECT column_name, data_type from information_schema.columns where table_name=$1";
+const queryTemplate = `
+SELECT column_name, data_type
+FROM
+    information_schema.columns
+WHERE
+    table_name=$1
+    AND column_name != 'time'
+    AND column_name != 'metric'
+    AND column_name != 'value'
+`;
 
 
 // Implementation of this endpoint
@@ -29,7 +38,7 @@ exports.handler = async (appId) => {
         resp.schema = result.rows.map(
             rowObj => ({
                 column: rowObj.column_name,
-                datatype: rowObj.data_type === "timestamp with time zone" ? "TIMESTAMPTZ" : rowObj.data_type.toUpperCase()
+                datatype: rowObj.data_type.toUpperCase()
             })
         );
 

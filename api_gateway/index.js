@@ -60,7 +60,6 @@ exports.handler = async (event, lambdaContext) => {
             )
             break;
     }
-    console.log("Done");
 
     return response;
 };
