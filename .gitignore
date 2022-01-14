@@ -107,3 +107,5 @@ dist
 bin/
 obj/
 .vs/
+/api_gateway/lambda.*.zip
+/api_gateway/cacert.pem
