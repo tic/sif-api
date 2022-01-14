@@ -44,8 +44,8 @@ app.get("/v1/documentation", require("./endpoints/documentation").getDocumentati
 
 // Health check endpoint
 app.get("/", (req, res) => {
-    console.log("Health check initiated");
-    res.status(200).send("");
+    console.log("[%s] Health check", new Date().getTime());
+    res.status(200).json({ code: 200, message: "Successful health check" });
 });
 
 
