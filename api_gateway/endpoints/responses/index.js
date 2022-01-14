@@ -5,7 +5,7 @@
 
 // The default response for STATUS 200 - OK
 exports.response200 = {
-
+    code: 200
 };
 
 
