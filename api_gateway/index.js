@@ -3,16 +3,16 @@
 const endpoints = {
     "/apps/list": require("./endpoints/list").handler,
     "/apps/app/{app_name}/schema": require("./endpoints/schema").handler,
-    "/apps/app/{app_name}/download": require("./endpoints/download").handler,
-    "/apps/app/{app_name}/download/{metric}": require("./endpoints/downloadMetric").handler,
     "/apps/app/{app_name}": require("./endpoints/deleteApp").handler,
-    "/apps/app/{app_name}/metrics": require("./endpoints/metrics").handler
+    "/apps/app/{app_name}/metrics": require("./endpoints/metrics").handler,
+    "/apps/app/{app_name}/count": require("./endpoints/count").handler
 };
 
 
 function generateAppId(username, appName) {
     return `${username}_${appName}`;
 }
+
 
 exports.handler = async (event, lambdaContext) => {
     // Username accessible via `event.context.username`
@@ -59,6 +59,17 @@ exports.handler = async (event, lambdaContext) => {
                 )
             )
             break;
+
+        // GET - Count the number of datapoints for an app in a time range
+        case "/apps/app/{app_name}/count":
+            response = await handler(
+                generateAppId(
+                    event.context.username,
+                    event.params.path.app_name
+                ),
+                event.params.querystring?.start,
+                event.params.querystring?.end
+            )
     }
 
     return response;

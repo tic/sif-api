@@ -9,6 +9,13 @@ exports.response200 = {
 };
 
 
+// The default response for STATUS 400 - BAD REQUEST
+exports.response400 = {
+    code: 400,
+    message: "Missing required request parameters"
+};
+
+
 // The default response for STATUS 404 - NOT FOUND
 exports.response404 = {
     code: 404,
