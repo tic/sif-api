@@ -9,7 +9,7 @@ const { response } = require("express");
 
 
 // Query template for downloading some metric data from an app
-const maximumChunkSize = 100;
+const maximumChunkSize = 1000;
 const queryTemplate = `
 SELECT * from %I
 WHERE
@@ -17,6 +17,7 @@ WHERE
     AND EXTRACT(epoch FROM time) >= $2
     AND EXTRACT(epoch FROM time) <= $3
     ORDER BY time
+    OFFSET $4
     LIMIT ${maximumChunkSize}
 `;
 
@@ -84,34 +85,26 @@ exports.downloadSingleMetric = async (req, res) => {
         res.write(csvHeaderRow);
 
         // Initialize chunk variables
-        var chunkStart = queryStart;
-        var lastChunkSize = 0;
+        let offset = 0;
+        let lastChunkSize = 0;
+        let abortDl = false;
+
+        // Register cancelled download handlers
+        res.on("aborted", () => abortDl = true);
+        res.on("close", () => abortDl = true);
 
         do {
-            // Fetch data for the current chunk
+            // Increase offset based on previous chunk
+            offset += lastChunkSize;
+
+            // Query db for the chunk
             const chunk = await query(
                 tabledQueryTemplate,
-                [req.params.metric, chunkStart, queryEnd]
+                [req.params.metric, queryStart, queryEnd, offset]
             );
 
-            // Update the last chunk size
+            // Record how many rows were found
             lastChunkSize = chunk.rowCount;
-
-            // If the current chunk is empty, then the download
-            // is finished because there are no more datapoints
-            // between chunkStart and queryEnd
-            if (lastChunkSize === 0) {
-                break;
-            }
-
-            // Update the chunk start time
-            // NOTE: There is a *slight* potential here for data
-            //       to be skipped when downloading. Consider a
-            //       scenario where 200 datapoints had the same
-            //       timestamp. This process would fetch the first
-            //       100, but skip the next 100 since it increments
-            //       the chunk start time by 1.
-            chunkStart = (chunk.rows[lastChunkSize - 1].time.getTime() + 1) / 1000;
 
             // Transform the fetched data
             const transformedRowData = chunk.rows.map(
@@ -129,8 +122,8 @@ exports.downloadSingleMetric = async (req, res) => {
 
             // Continue to the next chunk if the last chunk 
             // was a full chunk. Otherwise, we have retrieved
-            // all of the data between chunkStart and queryEnd
-        } while (lastChunkSize === maximumChunkSize);
+            // all of the data between queryStart and queryEnd
+        } while (lastChunkSize === maximumChunkSize && abortDl === false);
 
         res.end();
         return;
