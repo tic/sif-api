@@ -12,7 +12,9 @@ SELECT *
 FROM
     "errorTable"
 WHERE
-    username=$1`;
+    username=$1
+ORDER BY
+    timestamp desc`;
 
 
 // Implementation of this endpoint
