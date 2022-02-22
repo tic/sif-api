@@ -5,7 +5,8 @@ const endpoints = {
     "/apps/app/{app_name}/schema": require("./endpoints/schema").handler,
     "/apps/app/{app_name}": require("./endpoints/deleteApp").handler,
     "/apps/app/{app_name}/metrics": require("./endpoints/metrics").handler,
-    "/apps/app/{app_name}/count": require("./endpoints/count").handler
+    "/apps/app/{app_name}/count": require("./endpoints/count").handler,
+    "/errors": require("./endpoints/errors").handler
 };
 
 
@@ -47,7 +48,7 @@ exports.handler = async (event, lambdaContext) => {
                     event.context.username,
                     event.params.path.app_name
                 )
-            )
+            );
             break;
 
         // GET - List metrics present in an app
@@ -57,7 +58,7 @@ exports.handler = async (event, lambdaContext) => {
                     event.context.username,
                     event.params.path.app_name
                 )
-            )
+            );
             break;
 
         // GET - Count the number of datapoints for an app in a time range
@@ -69,7 +70,13 @@ exports.handler = async (event, lambdaContext) => {
                 ),
                 event.params.querystring?.start,
                 event.params.querystring?.end
-            )
+            );
+            break;
+
+        case "/errors":
+            response = await handler(
+                event.context.username
+            );
     }
 
     return response;
