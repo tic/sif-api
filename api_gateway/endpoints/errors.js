@@ -10,7 +10,7 @@ const responses = require("./responses");
 const queryTemplate = `
 SELECT *
 FROM
-    errorTable
+    "errorTable"
 WHERE
     username=$1`;
 
