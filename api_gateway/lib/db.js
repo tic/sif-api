@@ -23,7 +23,11 @@ async function query(text, params) {
         ssl: parseSsl()
     });
 
-    return await pool.query(text, params);
+    const dbResponse = await pool.query(text, params);
+
+    await pool.end()
+
+    return dbResponse;
 }
 
 
