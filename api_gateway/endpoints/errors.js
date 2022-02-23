@@ -12,7 +12,7 @@ SELECT *
 FROM
     "errorTable"
 WHERE
-    username=$1
+    app_id LIKE CONCAT($1::varchar, '\\_%')
 ORDER BY
     timestamp desc`;
 
@@ -30,7 +30,9 @@ exports.handler = async (username) => {
         resp.errors = result.rows.map(
             rowObj => ({
                 errorId: rowObj.id,
+                appName: rowObj.app_id.substring(rowObj.app_id.indexOf("_") + 1),
                 timestamp: rowObj.timestamp,
+                device: rowObj.device,
                 error: rowObj.error
             })
         );
