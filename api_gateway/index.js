@@ -6,7 +6,8 @@ const endpoints = {
     "/apps/app/{app_name}": require("./endpoints/deleteApp").handler,
     "/apps/app/{app_name}/metrics": require("./endpoints/metrics").handler,
     "/apps/app/{app_name}/count": require("./endpoints/count").handler,
-    "/errors": require("./endpoints/errors").handler
+    "/errors": require("./endpoints/errors").handler,
+    "/sources": require("./endpoints/sources").handler
 };
 
 
@@ -74,6 +75,11 @@ exports.handler = async (event, lambdaContext) => {
             break;
 
         case "/errors":
+            response = await handler(
+                event.context.username
+            );
+        
+        case "/sources":
             response = await handler(
                 event.context.username
             );

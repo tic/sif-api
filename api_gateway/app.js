@@ -7,15 +7,15 @@ function testSchema() {
     handler({
         params: {
             path: {
-                app_name: "machineUsage"
+                
             },
             querystring: {
-                start: "1643041334"
+                
             }
         },
         context: {
-            username: "gmf",
-            resourcePath: "/apps/app/{app_name}/count"
+            username: "",
+            resourcePath: ""
         }
     }).then(r => console.log(r))
     .catch(e => console.log(e));
