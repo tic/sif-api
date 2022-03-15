@@ -9,14 +9,13 @@ const { response } = require("express");
 
 
 // Query template for downloading some metric data from an app
-const maximumChunkSize = 1000;
+const maximumChunkSize = 30000;
 const queryTemplate = `
 SELECT * from %I
 WHERE
     metric=$1
-    AND EXTRACT(epoch FROM time) >= $2
-    AND EXTRACT(epoch FROM time) <= $3
-    ORDER BY time
+    time >= to_timestamp($2)
+    time <= to_timestamp($3)
     OFFSET $4
     LIMIT ${maximumChunkSize}
 `;
@@ -132,6 +131,8 @@ exports.downloadSingleMetric = async (req, res) => {
         console.log("Unexpected download error\n%s", err);
 
         // 500 error
-        res.status(500).json(responses.response500);
+        res.status(500);
+        res.write("download failed");
+        res.end();
     }
 }
