@@ -4,24 +4,28 @@ const { config } = require("./config");
 
 // Import libraries
 const { Pool } = require("pg");
-const { parseSsl } = require("pg-ssl");
 
 
-// Create a connection pool to the database
+// Create connection pools to the database
 const pool = new Pool({
     user: config.TS_USER,
     host: config.TS_HOST,
     database: config.TS_DATABASE,
     password: config.TS_PASSWD,
-    port: config.TS_PORT,
-    ssl: parseSsl()
+    port: config.TS_PORT
 });
 
 
 // Executes the query given by @text using SQL
 // parameters provided by @params.
 async function query(text, params) {
-    return await pool.query(text, params);
+    const client = await pool.connect();
+
+    try {
+        return await pool.query(text, params);
+    } finally {
+        client.release();
+    }
 }
 
 

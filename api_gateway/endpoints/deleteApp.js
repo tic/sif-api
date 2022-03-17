@@ -18,7 +18,9 @@ exports.handler = async (appId) => {
             format(
                 queryTemplate,
                 [appId]
-            )
+            ),
+            [],
+            "delete"
         );
 
         if (!result) {

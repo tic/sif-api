@@ -20,7 +20,7 @@ ORDER BY
 // Implementation of this endpoint
 exports.handler = async (username) => {
     try {
-        const result = await query(queryTemplate, [username]);
+        const result = await query(queryTemplate, [username], "tracking");
 
         if (!result) {
             throw "Invalid result object"

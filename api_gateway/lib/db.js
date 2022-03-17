@@ -4,17 +4,31 @@ const { config } = require("./config");
 
 // Import libraries
 const { Pool } = require("pg");
-const { parseSsl } = require("pg-ssl");
 
 
-// Create a connection pool to the database
-const pool = new Pool({
+// Create connection pools to the database
+const poolData = new Pool({
     user: config.TS_USER,
     host: config.TS_HOST,
     database: config.TS_DATABASE,
     password: config.TS_PASSWD,
-    port: config.TS_PORT,
-    ssl: parseSsl()
+    port: config.TS_PORT
+});
+
+const poolIB = new Pool({
+    user: config.TS_USER_IB,
+    host: config.TS_HOST,
+    database: config.TS_DATABASE,
+    password: config.TS_PASSWD_IB,
+    port: config.TS_PORT
+});
+
+const poolTracking = new Pool({
+    user: config.TS_USER,
+    host: config.TS_HOST,
+    database: config.TS_DATABASE_TRACKING,
+    password: config.TS_PASSWD,
+    port: config.TS_PORT
 });
 
 
@@ -22,7 +36,19 @@ const pool = new Pool({
 // parameters provided by @params. Uses the
 // pooled connection by checking out a client
 // and releasing it after the query is done.
-async function query(text, params) {
+async function query(text, params, poolName) {
+    // Pick the correct pool
+    let pool;
+    if(poolName === undefined || poolName === "data") {
+        pool = poolData;
+    } else if(poolName === "tracking") {
+        pool = poolTracking;
+    } else if(poolName === "delete") {
+        pool = poolIB;
+    } else {
+        throw new Error("unknown pool type");
+    }
+    
     // Check out a client from the pool
     const client = await pool.connect();
 
