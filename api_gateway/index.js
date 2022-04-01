@@ -7,7 +7,9 @@ const endpoints = {
     "/apps/app/{app_name}/metrics": require("./endpoints/metrics").handler,
     "/apps/app/{app_name}/count": require("./endpoints/count").handler,
     "/errors": require("./endpoints/errors").handler,
-    "/sources": require("./endpoints/sources").handler
+    "/sources": require("./endpoints/sources").handler,
+    "/sources/add": require("./endpoints/add_source").handler,
+    "/sources/{source_id}": require("./endpoints/delete_source").handler,
 };
 
 
@@ -78,11 +80,28 @@ exports.handler = async (event, lambdaContext) => {
             response = await handler(
                 event.context.username
             );
+            break;
         
         case "/sources":
             response = await handler(
                 event.context.username
             );
+            break;
+        
+        case "/sources/add":
+            response = await handler(
+                event.context.username,
+                event.body.sourceType,
+                event.body.sourceMetadata
+            );
+            break;
+        
+        case "/sources/{source_id}":
+            response = await handler(
+                event.context.username,
+                event.params.path.source_id
+            );
+            break;
     }
 
     return response;
