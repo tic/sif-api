@@ -3,7 +3,7 @@
 const documentation = `{
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "SIF Download API",
     "license": {
       "name": "MIT"
@@ -60,6 +60,42 @@ const documentation = `{
                     "required": true,
                     "schema": {
                         "type": "string"
+                    }
+                },
+                {
+                    "name": "start",
+                    "in": "query",
+                    "description": "Start time for the download window in Unix Epoch time (seconds)",
+                    "required": true,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "end",
+                    "in": "query",
+                    "description": "End time for the download window in Unix Epoch time (seconds). Defaults to now",
+                    "required": false,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "bucket",
+                    "in": "query",
+                    "description": "Number of seconds (>=1) to bucket the results by. If not provided, results are not bucketed at all",
+                    "required": false,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "metadata",
+                    "in": "query",
+                    "description": "Stringified JSON object of metadata key/values to match on",
+                    "required": false,
+                    "schema": {
+                        "type": "object"
                     }
                 }
             ],
@@ -119,6 +155,42 @@ const documentation = `{
                     "required": true,
                     "schema": {
                         "type": "string"
+                    }
+                },
+                {
+                    "name": "start",
+                    "in": "query",
+                    "description": "Start time for the download window in Unix Epoch time (seconds)",
+                    "required": true,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "end",
+                    "in": "query",
+                    "description": "End time for the download window in Unix Epoch time (seconds). Defaults to now",
+                    "required": false,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "bucket",
+                    "in": "query",
+                    "description": "Number of seconds (>=1) to bucket the results by. If not provided, results are not bucketed at all",
+                    "required": false,
+                    "schema": {
+                        "type": "number"
+                    }
+                },
+                {
+                    "name": "metadata",
+                    "in": "query",
+                    "description": "Stringified JSON object of metadata key/values to match on",
+                    "required": false,
+                    "schema": {
+                        "type": "object"
                     }
                 }
             ],
